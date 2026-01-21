@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "387806268641",
+    "project_id": "cpmad-project-1-cb137",
+    "storage_bucket": "cpmad-project-1-cb137.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:387806268641:android:3ffedfa90a8a4971617ba0",
+        "android_client_info": {
+          "package_name": "com.example.cpmad_project1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzMkzhDE03kmhvfz6Mxyiv-lVHQNKJccU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
