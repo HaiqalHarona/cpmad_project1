@@ -2,7 +2,7 @@
 
 Nutritrack is a cross-platform mobile application built with **Flutter** that helps users track their daily nutrition. It allows users to log meals, monitor calorie intake, and visualize macronutrient breakdowns (Protein, Carbs, Fats) in real-time.
 
-The app integrates **Firebase** for backend services (Authentication & Database) and the **Nutritionix API** for accurate food data.
+The app integrates **Firebase** for backend services (Authentication & Database) and the **USDA API** for accurate food data.
 
 ## 📱 Features
 
@@ -12,7 +12,7 @@ The app integrates **Firebase** for backend services (Authentication & Database)
     * Real-time breakdown of macros (Protein, Carbs, Fats).
     * Categorized meal logging (Breakfast, Lunch, Dinner, Snacks).
 * **Food Search**:
-    * Integration with **Nutritionix API** to search for thousands of food items.
+    * Integration with **USDA API** to search for thousands of food items.
     * Detailed nutritional information (Calories, Serving Size, Macros).
 * **User Profile**:
     * Manage personal stats (Weight, Height, Age).
@@ -24,7 +24,7 @@ The app integrates **Firebase** for backend services (Authentication & Database)
 * **Framework**: Flutter (Dart)
 * **State Management**: GetX
 * **Backend**: Firebase (Core, Auth, Firestore)
-* **API**: Nutritionix (HTTP requests)
+* **API**: USDA (HTTP requests)
 * **UI Components**: `percent_indicator`, Custom Bottom Navigation
 
 ## 📂 Folder Structure
@@ -35,7 +35,7 @@ The project follows a clean MVC (Model-View-Controller) + Service architecture:
 lib/
 ├── components/          # Reusable UI widgets (Navbar, Gradients)
 ├── controllers/         # Logic & State Management (Auth, Dashboard, Search)
-├── models/              # Data Models (FoodLog, NutritionixResponse)
+├── models/              # Data Models (FoodLog, USDAResponse)
 ├── services/            # External Data Handling (Firestore, API calls)
 ├── views/               # UI Screens (Login, Dashboard, Search, Profile)
 ├── main.dart            # Entry point & Firebase Initialization
