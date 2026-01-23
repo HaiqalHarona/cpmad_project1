@@ -1,37 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../state/nav_controller.dart';
+import '../controllers/nav_controller.dart';
+import '../controllers/navbar.dart';
 
-class CustomBottomNavBar extends StatelessWidget {
-  final NavController navController = Get.find();
+import '../views/dashboard.dart';
+import '../views/search.dart';
+import '../views/editprofile.dart';
 
-  CustomBottomNavBar({super.key});
+class MainLayout extends StatelessWidget {
+  MainLayout({super.key});
+
+  final NavController navController = Get.put(NavController());
+
+  final List<Widget> _pages = [
+    // const DashboardView(),
+    // const SearchView(),
+    // const ProfileView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => NavigationBar(
-      elevation: 5,
-      backgroundColor: Colors.white,
-      selectedIndex: navController.tabIndex.value,
-      onDestinationSelected: navController.changeTabIndex,
-      indicatorColor: const Color(0xFF4e74f9).withOpacity(0.2),
-      destinations: const [
-        NavigationDestination(
-          icon: Icon(Icons.book_outlined),
-          selectedIcon: Icon(Icons.book, color: Color(0xFF4e74f9)),
-          label: 'Diary',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.search_outlined),
-          selectedIcon: Icon(Icons.search, color: Color(0xFF4e74f9)),
-          label: 'Search',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.person_outline),
-          selectedIcon: Icon(Icons.person, color: Color(0xFF4e74f9)),
-          label: 'Profile',
-        ),
-      ],
-    ));
+    return Scaffold(
+      body: Obx(() => IndexedStack(
+        index: navController.tabIndex.value,
+        children: _pages,
+      )),
+
+      bottomNavigationBar: CustomBottomNavBar(),
+    );
   }
 }

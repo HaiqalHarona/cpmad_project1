@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../components/gradient_bg.dart';
+import '../controllers/auth_controller.dart';
 
 class RegisterView extends StatelessWidget {
-  const RegisterView({super.key});
+  RegisterView({super.key});
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthController _authController = Get.put(AuthController());
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +54,11 @@ class RegisterView extends StatelessWidget {
                       ),
                       const SizedBox(height: 30),
 
-                      _buildTextField("Full Name", "Enter Full Name", Icons.person_outline),
+                      _buildTextField("Full Name", "Enter Full Name", Icons.person_outline, _nameController),
                       const SizedBox(height: 20),
-                      _buildTextField("Email", "Enter Email", Icons.email_outlined),
+                      _buildTextField("Email", "Enter Email", Icons.email_outlined, _emailController),
                       const SizedBox(height: 20),
-                      _buildTextField("Password", "Enter Password", Icons.lock_outline, isPassword: true),
+                      _buildTextField("Password", "Enter Password", Icons.lock_outline, _passwordController, isPassword: true),
 
                       const SizedBox(height: 20),
 
@@ -82,7 +88,13 @@ class RegisterView extends StatelessWidget {
                       const SizedBox(height: 30),
 
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _authController.register(
+                            _emailController.text.trim(),
+                            _passwordController.text,
+                            _nameController.text.trim(),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF4E74F9),
                           foregroundColor: Colors.white,
@@ -117,13 +129,14 @@ class RegisterView extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField(String label, String hint, IconData icon, {bool isPassword = false}) {
+  Widget _buildTextField(String label, String hint, IconData icon, TextEditingController controller, {bool isPassword = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: const TextStyle(color: Colors.grey, fontSize: 12, fontWeight: FontWeight.w500)),
         const SizedBox(height: 8),
         TextField(
+          controller: controller,
           obscureText: isPassword,
           decoration: InputDecoration(
             hintText: hint,

@@ -98,7 +98,7 @@ class LoginView extends StatelessWidget {
                         children: [
                           const Text("Don't have an account? ", style: TextStyle(color: Colors.grey)),
                           GestureDetector(
-                            onTap: () => Get.to(() => const RegisterView()),
+                            onTap: () => Get.to(() => RegisterView()),
                             child: const Text("Sign up", 
                                 style: TextStyle(color: Color(0xFF4E74F9), fontWeight: FontWeight.bold)),
                           ),
