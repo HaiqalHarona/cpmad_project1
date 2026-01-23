@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../service/firestore_service.dart';
-import '../views/dashboard.dart';
+import '../components/navbar_view.dart';
 import '../views/login.dart';
 
 class AuthController extends GetxController {
@@ -57,7 +57,7 @@ class AuthController extends GetxController {
       await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password);
       
-      Get.offAll(() => Dashboard()); 
+      Get.offAll(() => const Dashboard()); 
       
     } on FirebaseAuthException catch (e) {
       Get.snackbar("Login Error", e.message ?? "Check your credentials",
