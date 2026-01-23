@@ -19,8 +19,11 @@ class HomeView extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: const Text("Today's Diary",
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: const Padding(
+          padding: EdgeInsets.only(bottom: 20),
+          child: Text("Today's Diary",
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -77,7 +80,7 @@ class HomeView extends StatelessWidget {
                             pointColorMapper: (ChartData data, _) => data.color,
                             maximumValue: calorieGoal,
                             radius: '100%',
-                            innerRadius: '80%', // Makes it a ring, not a pie
+                            innerRadius: '80%',
                             cornerStyle: CornerStyle.bothCurve,
                             trackColor: Colors.grey.shade200,
                           )

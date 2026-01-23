@@ -60,7 +60,7 @@ class AuthController extends GetxController {
       Get.offAll(() => const Dashboard()); 
       
     } on FirebaseAuthException catch (e) {
-      Get.snackbar("Login Error", e.message ?? "Check your credentials",
+      Get.snackbar("Login Error: Check your credentials", e.message ?? "Unknown Error",
           backgroundColor: Colors.redAccent, colorText: Colors.white);
     }
   }
