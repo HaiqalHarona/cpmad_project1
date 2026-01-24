@@ -9,22 +9,21 @@ class GradientBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        // 1. Blue/Purple Gradient Background
+
         Container(
-          height: MediaQuery.of(context).size.height * 0.35, // Covers top 35%
+          height: MediaQuery.of(context).size.height * 0.35,
           decoration: const BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                Color(0xFF2E3B8D), // Dark Blue
-                Color(0xFF4E74F9), // Main Blue
-                Color(0xFF8DA4F7), // Light Purple/Blue
+                Color(0xFF2E3B8D), 
+                Color(0xFF4E74F9), 
+                Color(0xFF8DA4F7), 
               ],
             ),
           ),
         ),
-        // 2. Decorative Abstract Circles
         Positioned(
           top: -60,
           left: -60,
@@ -33,7 +32,7 @@ class GradientBackground extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: .1),
             ),
           ),
         ),
@@ -45,11 +44,10 @@ class GradientBackground extends StatelessWidget {
             height: 140,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: .15),
             ),
           ),
         ),
-        // 3. The Page Content
         child,
       ],
     );

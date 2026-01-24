@@ -1,6 +1,8 @@
+// ignore_for_file: prefer_const_declarations
+
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../components/gradient_bg.dart';
+import '../components/loggedin_bg.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
@@ -28,7 +30,7 @@ class HomeView extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
       ),
-      body: GradientBackground(
+      body: LoggedInBackground(
         child: Padding(
           padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
           child: Column(
@@ -40,7 +42,7 @@ class HomeView extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withValues(alpha: .1),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     )
@@ -129,9 +131,9 @@ class HomeView extends StatelessWidget {
       width: 100,
       padding: const EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.2), // Semi-transparent
+        color: Colors.white.withValues(alpha: .2), // Semi-transparent
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withOpacity(0.3)),
+        border: Border.all(color: Colors.white.withValues(alpha: .3)),
       ),
       child: Column(
         children: [

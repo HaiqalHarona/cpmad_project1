@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../components/gradient_bg.dart';
+import '../components/auth_gradient_bg.dart';
 import '../controllers/auth_controller.dart';
 
 class RegisterView extends StatelessWidget {

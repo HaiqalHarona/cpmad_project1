@@ -13,7 +13,7 @@ Future<void> main() async {
   );
 
   runApp(const NutritrackApp());
-}
+}                             
 
 class NutritrackApp extends StatelessWidget {
   const NutritrackApp({super.key});
