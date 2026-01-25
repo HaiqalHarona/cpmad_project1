@@ -1,22 +1,18 @@
 // ignore_for_file: prefer_const_declarations
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../components/loggedin_bg.dart';
+import '../controllers/home_controller.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final double caloriesConsumed = 1250;
-    final double calorieGoal = 2000;
-    final double caloriesRemaining = calorieGoal - caloriesConsumed;
-    final double progressPercent = (caloriesConsumed / calorieGoal) * 100;
-
-    final List<ChartData> chartData = [
-      ChartData('Intake', caloriesConsumed, const Color(0xFF4E74F9)),
-    ];
+    // Inject the controller
+    final HomeController controller = Get.put(HomeController());
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -24,7 +20,8 @@ class HomeView extends StatelessWidget {
         title: const Padding(
           padding: EdgeInsets.only(bottom: 20),
           child: Text("Today's Diary",
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -35,6 +32,7 @@ class HomeView extends StatelessWidget {
           padding: const EdgeInsets.only(top: 100, left: 20, right: 20),
           child: Column(
             children: [
+              // --- CALORIE CARD ---
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
@@ -48,60 +46,75 @@ class HomeView extends StatelessWidget {
                     )
                   ],
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text("Calories Remaining",
-                              style:
-                                  TextStyle(color: Colors.grey, fontSize: 14)),
-                          const SizedBox(height: 5),
-                          Text("${caloriesRemaining.toInt()}",
-                              style: const TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 5),
-                          Text(
-                              "Goal: ${calorieGoal.toInt()}  -  Food: ${caloriesConsumed.toInt()}",
-                              style: const TextStyle(
-                                  color: Colors.grey, fontSize: 12)),
-                        ],
+                child: Obx(() {
+                  // Listen to live data
+                  final consumed = controller.caloriesConsumed.value;
+                  final goal = controller.calorieGoal.value;
+                  final remaining = controller.caloriesRemaining;
+                  final percent = controller.progressPercent;
+
+                  final List<ChartData> chartData = [
+                    ChartData('Intake', consumed, const Color(0xFF4E74F9)),
+                  ];
+
+                  return Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text("Calories Remaining",
+                                style: TextStyle(
+                                    color: Colors.grey, fontSize: 14)),
+                            const SizedBox(height: 5),
+                            Text("${remaining.toInt()}",
+                                style: const TextStyle(
+                                    fontSize: 32, fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 5),
+                            Text(
+                                "Goal: ${goal.toInt()}  -  Food: ${consumed.toInt()}",
+                                style: const TextStyle(
+                                    color: Colors.grey, fontSize: 12)),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 120,
-                      width: 120,
-                      child: SfCircularChart(
-                        margin: EdgeInsets.zero,
-                        series: <CircularSeries>[
-                          RadialBarSeries<ChartData, String>(
-                            dataSource: chartData,
-                            xValueMapper: (ChartData data, _) => data.x,
-                            yValueMapper: (ChartData data, _) => data.y,
-                            pointColorMapper: (ChartData data, _) => data.color,
-                            maximumValue: calorieGoal,
-                            radius: '100%',
-                            innerRadius: '80%',
-                            cornerStyle: CornerStyle.bothCurve,
-                            trackColor: Colors.grey.shade200,
-                          )
-                        ],
-                        annotations: <CircularChartAnnotation>[
-                          CircularChartAnnotation(
-                            widget: Text(
-                              "${progressPercent.toInt()}%",
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                          )
-                        ],
+                      SizedBox(
+                        height: 120,
+                        width: 120,
+                        child: SfCircularChart(
+                          margin: EdgeInsets.zero,
+                          series: <CircularSeries>[
+                            RadialBarSeries<ChartData, String>(
+                              dataSource: chartData,
+                              xValueMapper: (ChartData data, _) => data.x,
+                              yValueMapper: (ChartData data, _) => data.y,
+                              pointColorMapper: (ChartData data, _) =>
+                                  data.color,
+                              maximumValue: goal.toDouble(),
+                              radius: '100%',
+                              innerRadius: '80%',
+                              cornerStyle: CornerStyle.bothCurve,
+                              trackColor: Colors.grey.shade200,
+                            )
+                          ],
+                          annotations: <CircularChartAnnotation>[
+                            CircularChartAnnotation(
+                              widget: Text(
+                                "${percent.toInt()}%",
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ),
+
               const SizedBox(height: 25),
+
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Text("Macronutrients",
@@ -111,14 +124,25 @@ class HomeView extends StatelessWidget {
                         fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildMacroCard("Protein", "120g", Colors.purpleAccent),
-                  _buildMacroCard("Carbs", "230g", Colors.orangeAccent),
-                  _buildMacroCard("Fat", "60g", Colors.redAccent),
-                ],
-              ),
+
+              // --- MACRO CARDS ---
+              Obx(() => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildMacroCard(
+                          "Protein",
+                          "${controller.proteinConsumed.value.toInt()}g",
+                          const Color.fromARGB(255, 0, 81, 255)),
+                      _buildMacroCard(
+                          "Carbs",
+                          "${controller.carbsConsumed.value.toInt()}g",
+                          Colors.orangeAccent),
+                      _buildMacroCard(
+                          "Fat",
+                          "${controller.fatConsumed.value.toInt()}g",
+                          Colors.redAccent),
+                    ],
+                  )),
             ],
           ),
         ),
@@ -131,14 +155,15 @@ class HomeView extends StatelessWidget {
       width: 100,
       padding: const EdgeInsets.symmetric(vertical: 15),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: .2), // Semi-transparent
+        color: Colors.white,
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.white.withValues(alpha: .3)),
+        border: Border.all(color: Colors.white.withValues(alpha: .1), width: 1),
       ),
       child: Column(
         children: [
           Text(label,
-              style: const TextStyle(color: Colors.white70, fontSize: 12)),
+              style: const TextStyle(
+                  color: Color.fromARGB(179, 0, 0, 0), fontSize: 12)),
           const SizedBox(height: 5),
           Text(value,
               style: TextStyle(

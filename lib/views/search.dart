@@ -9,16 +9,16 @@ import '../model/foodlog_model.dart';
 import '../components/loggedin_bg.dart';
 
 class FoodSearchController extends GetxController {
-  // Prevent API spam while typing
+  // prevent api spam while typing
   final _debouncer = Debouncer(milliseconds: 500);
   final searchController = TextEditingController();
   
-  // Observable variables for UI updates
+  // observable variables for ui updates
   var searchResults = <Food>[].obs;
   var isLoading = false.obs;
   var selectedCategory = "".obs;
 
-  // USDA food categories
+  // usda food categories
   final List<String> categories = [
     "Dairy and Egg Products",
     "Fruits",
@@ -39,7 +39,16 @@ class FoodSearchController extends GetxController {
     "Meals, Entrees, and Side Dishes"
   ];
 
-  // Helper to safely get macro values
+  // helper to make text look nice (Apple, Raw instead of APPLE, RAW)
+  String formatName(String name) {
+    if (name.isEmpty) return "";
+    return name.split(' ').map((word) {
+      if (word.isEmpty) return "";
+      return word[0].toUpperCase() + word.substring(1).toLowerCase();
+    }).join(' ');
+  }
+
+  // helper to safely get macro values
   double getNutrient(Food food, String keyword) {
     try {
       final nutrient = food.foodNutrients.firstWhere(
@@ -60,20 +69,20 @@ class FoodSearchController extends GetxController {
     }
   }
 
-  // Trigger search when typing stops
+  // trigger search when typing stops
   void onSearchChanged(String query) {
     _debouncer.run(() => _performSearch(query));
   }
 
-  // Handle dropdown selection
+  // handle dropdown selection
   void onCategorySelected(String? category) {
     selectedCategory.value = category ?? "";
     _performSearch(searchController.text);
   }
 
-  // Call the API
+  // call the api
   void _performSearch(String query) {
-    // Don't search if everything is empty
+    // don't search if everything is empty
     if (query.isEmpty && selectedCategory.value.isEmpty) {
       searchResults.clear();
       return;
@@ -81,7 +90,7 @@ class FoodSearchController extends GetxController {
 
     isLoading.value = true;
 
-    // Fetch data from service
+    // fetch data from service
     HttpService.getFoods(
       query, 
       category: selectedCategory.value.isNotEmpty ? selectedCategory.value : null
@@ -91,20 +100,23 @@ class FoodSearchController extends GetxController {
     });
   }
 
-  // Calculate totals and save to DB
+  // calculate totals and save to db
   void saveFood(Food food, double servings) {
     String uid = FirebaseAuth.instance.currentUser!.uid;
 
-    // Get base macros per serving
+    // get base macros per serving
     double baseKcal = getNutrient(food, 'Energy');
     double baseProtein = getNutrient(food, 'Protein');
     double baseCarbs = getNutrient(food, 'Carbohydrate');
     double baseFat = getNutrient(food, 'Total lipid');
 
-    // Create the log entry
+    // use formatted name for cleaner logs
+    String cleanName = formatName(food.description);
+
+    // create the log entry
     FoodLogEntry entry = FoodLogEntry(
       userId: uid,
-      name: food.description,
+      name: cleanName,
       calories: baseKcal * servings,
       protein: baseProtein * servings,
       carbs: baseCarbs * servings,
@@ -113,10 +125,10 @@ class FoodSearchController extends GetxController {
       mealType: "Snack",
     );
 
-    // Save to Firestore
+    // save to firestore
     FirestoreService().logFood(entry);
 
-    // Show success message
+    // show success message
     Get.snackbar(
         "Success", "Added ${(baseKcal * servings).toInt()} kcal to your diary",
         backgroundColor: Colors.green, colorText: Colors.white);
@@ -126,7 +138,7 @@ class FoodSearchController extends GetxController {
 class SearchView extends StatelessWidget {
   const SearchView({super.key});
 
-  // Popup to ask for portion size
+  // popup to ask for portion size
   void _showPortionDialog(BuildContext context, FoodSearchController controller, Food food) {
     final TextEditingController portionController =
         TextEditingController(text: "1");
@@ -135,8 +147,12 @@ class SearchView extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(food.description,
-              maxLines: 2, overflow: TextOverflow.ellipsis),
+          // use formatted name and remove maxLines to show everything
+          title: Text(
+            controller.formatName(food.description),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -190,7 +206,7 @@ class SearchView extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header text
+                    // header text
                     const Text(
                       "Search Food",
                       style: TextStyle(
@@ -200,7 +216,7 @@ class SearchView extends StatelessWidget {
                     ),
                     const SizedBox(height: 15),
                     
-                    // Search input field
+                    // search input field
                     TextField(
                       controller: controller.searchController,
                       style: const TextStyle(color: Colors.black),
@@ -222,7 +238,7 @@ class SearchView extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
 
-                    // Dropdown category filter
+                    // dropdown category filter
                     Obx(() => DropdownButtonFormField<String>(
                       decoration: InputDecoration(
                         filled: true,
@@ -255,7 +271,7 @@ class SearchView extends StatelessWidget {
                 ),
               ),
 
-              // Results list container
+              // results list container
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -267,15 +283,15 @@ class SearchView extends StatelessWidget {
                     ),
                   ),
                   child: Obx(() {
-                    // Show loading spinner
+                    // show loading spinner
                     if (controller.isLoading.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    // Show empty state if no results
+                    // show empty state if no results
                     if (controller.searchResults.isEmpty) {
                       return _buildEmptyState();
                     }
-                    // Show the list of food items
+                    // show the list of food items
                     return ListView.separated(
                       padding: const EdgeInsets.all(20),
                       itemCount: controller.searchResults.length,
@@ -295,7 +311,7 @@ class SearchView extends StatelessWidget {
     );
   }
 
-  // Placeholder when list is empty
+  // placeholder when list is empty
   Widget _buildEmptyState() {
     return Center(
       child: Column(
@@ -310,7 +326,7 @@ class SearchView extends StatelessWidget {
     );
   }
 
-  // Individual food item card
+  // individual food item card
   Widget _buildFoodItem(BuildContext context, FoodSearchController controller, Food food) {
     double kcal = controller.getNutrient(food, 'Energy');
     double protein = controller.getNutrient(food, 'Protein');
@@ -320,7 +336,8 @@ class SearchView extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(vertical: 10),
       title: Text(
-        food.description,
+        // use format name here too for the list
+        controller.formatName(food.description),
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -347,7 +364,7 @@ class SearchView extends StatelessWidget {
     );
   }
 
-  // Helper to style the macro tags
+  // helper to style the macro tags
   Widget _buildMacroBadge(String text, Color color) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
@@ -364,7 +381,7 @@ class SearchView extends StatelessWidget {
   }
 }
 
-// Timer to delay API calls
+// timer to delay api calls
 class Debouncer {
   final int milliseconds;
   VoidCallback? action;

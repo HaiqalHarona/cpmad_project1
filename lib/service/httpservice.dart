@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 import '../model/fooditem_model.dart';
 
@@ -12,9 +13,9 @@ class HttpService {
     String? sortBy,
   }) async {
     Map<String, String> queryParams = {
-      'api_key': _apiKey,
       'query': query,
       'nutrients': '1008,1003,1004,1005',
+      'dataType': 'Foundation,SR Legacy,Branded',
       'pageSize': '25',
     };
 
@@ -32,16 +33,20 @@ class HttpService {
 
     try {
       final response = await http.get(uri, headers: {
+        'x-api-key': _apiKey,
         'Content-Type': 'application/json',
       });
+      log("HttpService Status Code: ${response.statusCode}");
 
       if (response.statusCode == 200) {
         final Welcome data = welcomeFromJson(response.body);
         return data.foods;
       } else {
+        log("HttpService API Error: ${response.body}");
         return null;
       }
     } catch (e) {
+      log("HttpService Network Error: $e");
       return null;
     }
   }
