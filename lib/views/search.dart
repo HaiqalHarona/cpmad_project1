@@ -25,7 +25,6 @@ class FoodSearchController extends GetxController {
     "Vegetables and Vegetable Products",
     "Poultry Products",
     "Beef Products",
-    "Pork Products",
     "Finfish and Shellfish Products",
     "Cereal Grains and Pasta",
     "Nut and Seed Products",

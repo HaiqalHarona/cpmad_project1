@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'fooditem_model.dart';
+import 'dart:ui';
 
 class FoodLogEntry {
   final String? id;          
@@ -90,4 +91,12 @@ class FoodLogEntry {
       mealType: map['mealType'] ?? 'Snack',
     );
   }
+  
+}
+
+class ChartData {
+  final String x;
+  final double y;
+  final Color color;
+  ChartData(this.x, this.y, this.color);
 }
