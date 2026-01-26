@@ -14,7 +14,7 @@ class CustomBottomNavBar extends StatelessWidget {
       backgroundColor: Colors.white,
       selectedIndex: navController.tabIndex.value,
       onDestinationSelected: navController.changeTabIndex,
-      indicatorColor: const Color(0xFF4e74f9).withValues(alpha: .2),
+      indicatorColor: const Color(0xFF4e74f9).withOpacity(0.2),
       destinations: const [
         NavigationDestination(
           icon: Icon(Icons.book_outlined),

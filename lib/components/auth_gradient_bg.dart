@@ -32,7 +32,7 @@ class GradientBackground extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: .1),
+              color: Colors.white.withOpacity(0.1),
             ),
           ),
         ),
@@ -44,7 +44,7 @@ class GradientBackground extends StatelessWidget {
             height: 140,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: .15),
+              color: Colors.white.withOpacity(0.15),
             ),
           ),
         ),
