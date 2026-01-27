@@ -167,4 +167,16 @@ class HomeController extends GetxController {
   double get progressPercent => calorieGoal.value == 0
       ? 0.0
       : (caloriesConsumed.value / calorieGoal.value * 100);
+
+  void deleteFoodEntry(FoodLogEntry log) {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    _firestore.removeFoodEntry(log.id!);
+    Get.snackbar("Deleted", "${log.name} removed.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.black45,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 2));
+  }
 }

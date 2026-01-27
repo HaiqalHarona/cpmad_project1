@@ -35,7 +35,7 @@ class LoginView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
-                        "Welcome back",
+                        "NutriTrack",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 28,

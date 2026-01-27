@@ -122,4 +122,9 @@ class FirestoreService {
     }
     return null;
   }
+
+  // Remove Food Entry
+  Future<void> removeFoodEntry(String docId) async {
+    await foodCollection.doc(docId).delete();
+  }
 }
