@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'nav_controller.dart';
+import '../controllers/nav_controller.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   final NavController navController = Get.find();
