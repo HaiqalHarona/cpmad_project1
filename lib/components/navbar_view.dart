@@ -5,6 +5,7 @@ import 'navbar.dart';
 import '../views/home.dart';
 import '../views/search.dart';
 import '../views/editprofile.dart';
+import '../views/stats.dart';
 
 class Dashboard extends StatelessWidget {
   const Dashboard({super.key});
@@ -16,7 +17,8 @@ class Dashboard extends StatelessWidget {
     final List<Widget> pages = [
       const HomeView(),
       const SearchView(),
-      const Editprofile(),
+      const ProfileView(),
+      const StatsView(),
     ];
 
     return Scaffold(

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../model/user_model.dart';
 import '../service/firestore_service.dart';
+import '../views/login.dart';
 
 class ProfileController extends GetxController {
   final FirestoreService _firestoreService = FirestoreService();
@@ -80,6 +81,8 @@ class ProfileController extends GetxController {
 
   Future<void> logout() async {
     await _auth.signOut();
-    Get.offAllNamed('/login'); // Redirect to login
+    
+    // Removes all previous screens (Home, Profile) and starts fresh at Login
+    Get.offAll(() =>  LoginView()); 
   }
 }

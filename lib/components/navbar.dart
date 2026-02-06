@@ -31,6 +31,11 @@ class CustomBottomNavBar extends StatelessWidget {
           selectedIcon: Icon(Icons.person, color: Color(0xFF4e74f9)),
           label: 'Profile',
         ),
+        NavigationDestination(
+          icon: Icon(Icons.bar_chart_outlined),
+          selectedIcon: Icon(Icons.bar_chart, color: Color(0xFF4e74f9)),
+          label: 'Stats',
+        )
       ],
     ));
   }

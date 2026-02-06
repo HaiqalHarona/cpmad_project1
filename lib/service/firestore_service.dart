@@ -3,10 +3,9 @@ import '../model/foodlog_model.dart';
 import '../model/user_model.dart';
 
 class FirestoreService {
-
   // Collection References
-  final CollectionReference usersCollection = FirebaseFirestore.instance
-      .collection('users');
+  final CollectionReference usersCollection =
+      FirebaseFirestore.instance.collection('users');
 
   final CollectionReference foodCollection =
       FirebaseFirestore.instance.collection('food_logs');
@@ -24,14 +23,16 @@ class FirestoreService {
     );
 
     await usersCollection.doc(uid).set(
-      newUser.toMap()..addAll({
-        'created_at': DateTime.now().toIso8601String(),
-      }),
-    );
+          newUser.toMap()
+            ..addAll({
+              'created_at': DateTime.now().toIso8601String(),
+            }),
+        );
   }
 
   // User Stats Update
-  Future<void> updateUserStats(String uid, int age, double height, double weight, int calorieGoal, String gender) async {
+  Future<void> updateUserStats(String uid, int age, double height,
+      double weight, int calorieGoal, String gender) async {
     await usersCollection.doc(uid).update({
       'age': age,
       'height': height,
@@ -49,7 +50,7 @@ class FirestoreService {
     String month = d.month.toString().padLeft(2, '0');
     String day = d.day.toString().padLeft(2, '0');
     String dateString = "${d.year}-$month-$day";
-    
+
     data['date_string'] = dateString;
 
     if (data['timestamp'] == null) {
@@ -58,6 +59,7 @@ class FirestoreService {
 
     await foodCollection.add(data);
   }
+
   // Get Daily Food Log
   Stream<List<FoodLogEntry>> getDailyLog(String uid, DateTime date) {
     String month = date.month.toString().padLeft(2, '0');
@@ -69,7 +71,8 @@ class FirestoreService {
         .where('date_string', isEqualTo: dateString)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => FoodLogEntry.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+            .map((doc) => FoodLogEntry.fromMap(
+                doc.data() as Map<String, dynamic>, doc.id))
             .toList());
   }
 
@@ -80,12 +83,14 @@ class FirestoreService {
         .orderBy('timestamp', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
-            .map((doc) => FoodLogEntry.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+            .map((doc) => FoodLogEntry.fromMap(
+                doc.data() as Map<String, dynamic>, doc.id))
             .toList());
   }
 
   // Add Custom Food
-  Future<void> addCustomFood(String uid, String name, double cal, double p, double c, double f) async {
+  Future<void> addCustomFood(
+      String uid, String name, double cal, double p, double c, double f) async {
     await usersCollection.doc(uid).collection('custom_foods').add({
       'name': name,
       'calories': cal,
@@ -103,16 +108,14 @@ class FirestoreService {
         .collection('custom_foods')
         .orderBy('name')
         .snapshots()
-        .map((snapshot) => snapshot.docs
-            .map((doc) => doc.data())
-            .toList());
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 
   // Get User Details
   Future<UserModel?> getUserDetails(String uid) async {
     try {
       DocumentSnapshot doc = await usersCollection.doc(uid).get();
-      
+
       if (doc.exists) {
         return UserModel.fromMap(doc.data() as Map<String, dynamic>);
       }
@@ -126,5 +129,27 @@ class FirestoreService {
   // Remove Food Entry
   Future<void> removeFoodEntry(String docId) async {
     await foodCollection.doc(docId).delete();
+  }
+
+  // Log Weight Entry
+  Future<void> logWeight(String uid, double weight) async {
+    // Save to history
+    await usersCollection.doc(uid).collection('weight_logs').add({
+      'weight': weight,
+      'date': FieldValue.serverTimestamp(),
+    });
+
+    // update the main user profile "current weight"
+    await usersCollection.doc(uid).update({'weight': weight});
+  }
+
+  // Get Weight History
+  Stream<List<Map<String, dynamic>>> getWeightHistory(String uid) {
+    return usersCollection
+        .doc(uid)
+        .collection('weight_logs')
+        .orderBy('date', descending: false) // Oldest first for the chart
+        .snapshots()
+        .map((snapshot) => snapshot.docs.map((doc) => doc.data()).toList());
   }
 }
