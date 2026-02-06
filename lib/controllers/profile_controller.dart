@@ -45,18 +45,15 @@ class ProfileController extends GetxController {
 
     if (user != null) {
       try {
-        // 1. Update Firestore Data
         await _firestoreService.updateUserStats(
           user.uid,
-          0, // Keeping age 0 or you can add an Age field if you want
+          0, 
           double.tryParse(heightController.text) ?? 0,
           double.tryParse(weightController.text) ?? 0,
           int.tryParse(calorieGoalController.text) ?? 2000,
           "Male", // Default or add Gender selector if needed
         );
 
-        // Update Username in Firestore separately if needed, or assume updateUserStats handles stats
-        // We'll manually update the username field here to be safe
         await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
           'username': usernameController.text,
         });
@@ -82,7 +79,8 @@ class ProfileController extends GetxController {
   Future<void> logout() async {
     await _auth.signOut();
     
-    // Removes all previous screens (Home, Profile) and starts fresh at Login
+    // Removes all previous screens 
     Get.offAll(() =>  LoginView()); 
   }
 }
+  
