@@ -14,7 +14,6 @@ class ProfileController extends GetxController {
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
   final heightController = TextEditingController();
-  final weightController = TextEditingController();
   final calorieGoalController = TextEditingController();
 
   var isLoading = false.obs;
@@ -33,7 +32,6 @@ class ProfileController extends GetxController {
       if (userData != null) {
         usernameController.text = userData.username;
         heightController.text = userData.height.toString();
-        weightController.text = userData.weight.toString();
         calorieGoalController.text = userData.calorieGoal.toString();
       }
     }
@@ -45,29 +43,35 @@ class ProfileController extends GetxController {
 
     if (user != null) {
       try {
+
+        UserModel? currentUserData =
+            await _firestoreService.getUserDetails(user.uid);
+        double currentWeight = currentUserData?.weight ?? 0.0;
+
         await _firestoreService.updateUserStats(
           user.uid,
-          0, 
+          0,
           double.tryParse(heightController.text) ?? 0,
-          double.tryParse(weightController.text) ?? 0,
+          currentWeight, // Pass the existing weight back to DB
           int.tryParse(calorieGoalController.text) ?? 2000,
-          "Male", // Default or add Gender selector if needed
+          "Male",
         );
 
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(user.uid)
+            .update({
           'username': usernameController.text,
         });
 
-        // 2. Update Password (if typed)
         if (passwordController.text.isNotEmpty) {
           await user.updatePassword(passwordController.text);
-          Get.snackbar("Success", "Password updated!", 
-            backgroundColor: Colors.green, colorText: Colors.white);
+          Get.snackbar("Success", "Password updated!",
+              backgroundColor: Colors.green, colorText: Colors.white);
         }
 
         Get.snackbar("Saved", "Profile updated successfully",
             backgroundColor: Colors.green, colorText: Colors.white);
-            
       } catch (e) {
         Get.snackbar("Error", e.toString(),
             backgroundColor: Colors.redAccent, colorText: Colors.white);
@@ -78,9 +82,6 @@ class ProfileController extends GetxController {
 
   Future<void> logout() async {
     await _auth.signOut();
-    
-    // Removes all previous screens 
-    Get.offAll(() =>  LoginView()); 
+    Get.offAll(() => LoginView());
   }
 }
-  

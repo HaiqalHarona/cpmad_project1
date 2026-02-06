@@ -17,8 +17,8 @@ class Dashboard extends StatelessWidget {
     final List<Widget> pages = [
       const HomeView(),
       const SearchView(),
-      const ProfileView(),
       const StatsView(),
+      const ProfileView(),
     ];
 
     return Scaffold(

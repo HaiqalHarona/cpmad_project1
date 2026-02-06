@@ -50,23 +50,13 @@ class ProfileView extends StatelessWidget {
                       _buildTextField("New Password (Optional)",
                           controller.passwordController, Icons.lock,
                           isObscure: true),
+
                       const SizedBox(height: 15),
 
-                      Row(
-                        children: [
-                          Expanded(
-                              child: _buildTextField(
-                                  "Weight (kg)",
-                                  controller.weightController,
-                                  Icons.monitor_weight,
-                                  isNumber: true)),
-                          const SizedBox(width: 15),
-                          Expanded(
-                              child: _buildTextField("Height (cm)",
-                                  controller.heightController, Icons.height,
-                                  isNumber: true)),
-                        ],
-                      ),
+                      _buildTextField("Height (cm)",
+                          controller.heightController, Icons.height,
+                          isNumber: true),
+
                       const SizedBox(height: 15),
                       _buildTextField("Daily Calorie Goal",
                           controller.calorieGoalController, Icons.flag,
