@@ -26,6 +26,11 @@ class CustomBottomNavBar extends StatelessWidget {
           selectedIcon: Icon(Icons.search, color: Color(0xFF4e74f9)),
           label: 'Search',
         ),
+        NavigationDestination(
+          icon: Icon(Icons.info_outline),
+          selectedIcon: Icon(Icons.info, color: Color(0xFF4e74f9)),
+          label: 'About',
+        ),
                 NavigationDestination(
           icon: Icon(Icons.bar_chart_outlined),
           selectedIcon: Icon(Icons.bar_chart, color: Color(0xFF4e74f9)),
