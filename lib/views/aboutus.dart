@@ -85,8 +85,8 @@ class AboutUsView extends StatelessWidget {
                 icon: Icons.code,
                 title: "Development Team",
                 content: "Built with Flutter & Firebase.\n\n"
-                    "• Haiqal Harona (Lead Developer)\n"
-                    "• Project 1 Team",
+                    "• Haiqal Harona (232363L)\n"
+                    "• Project 1",
               ),
               
               const SizedBox(height: 30),

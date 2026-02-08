@@ -34,6 +34,7 @@ class StatsView extends StatelessWidget {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
+          heroTag: "add_weight_button",
           onPressed: () => _showWeightDialog(context, controller),
           backgroundColor: Colors.orange,
           icon: const Icon(Icons.monitor_weight, color: Colors.white),

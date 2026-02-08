@@ -28,6 +28,7 @@ class HomeView extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       floatingActionButton: FloatingActionButton(
+        heroTag: "custom_food_button",
         onPressed: () => _showAddCustomFoodDialog(context, controller),
         backgroundColor: const Color(0xFF4E74F9),
         child: const Icon(Icons.add, color: Colors.white),

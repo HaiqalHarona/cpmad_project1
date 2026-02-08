@@ -30,9 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.6
+  get:
   http: ^1.1.0
-  url_launcher: ^6.2.4
+  url_launcher:
 
 
 
